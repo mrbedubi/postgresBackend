@@ -1,0 +1,30 @@
+{
+  "name": "backend-postgres",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A Strapi application",
+  "scripts": {
+    "develop": "strapi develop",
+    "start": "strapi start",
+    "build": "strapi build",
+    "strapi": "strapi"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "@strapi/strapi": "4.6.2",
+    "@strapi/plugin-users-permissions": "4.6.2",
+    "@strapi/plugin-i18n": "4.6.2",
+    "pg": "8.8.0"
+  },
+  "author": {
+    "name": "A Strapi developer"
+  },
+  "strapi": {
+    "uuid": "18a71b7b-5fb3-4465-911c-4911c8bf8218"
+  },
+  "engines": {
+    "node": ">=14.19.1 <=18.x.x",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT"
+}
