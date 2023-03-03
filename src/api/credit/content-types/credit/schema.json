@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "credits",
+  "info": {
+    "singularName": "credit",
+    "pluralName": "credits",
+    "displayName": "Credit"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Description": {
+      "type": "text",
+      "maxLength": 500
+    },
+    "Service": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "decimal",
+      "default": 0,
+      "min": 0
+    }
+  }
+}

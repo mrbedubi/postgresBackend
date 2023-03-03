@@ -9,12 +9,14 @@
     "build": "strapi build",
     "strapi": "strapi"
   },
-  "devDependencies": {},
   "dependencies": {
-    "@strapi/strapi": "4.6.2",
-    "@strapi/plugin-users-permissions": "4.6.2",
-    "@strapi/plugin-i18n": "4.6.2",
-    "pg": "8.8.0"
+    "@strapi/plugin-documentation": "4.7.1",
+    "@strapi/plugin-i18n": "4.7.1",
+    "@strapi/plugin-users-permissions": "4.7.1",
+    "@strapi/strapi": "4.7.1",
+    "pg": "8.9.0",
+    "strapi-plugin-protected-populate": "^1.1.0",
+    "strapi-provider-email-sendinblue": "^4.0.0"
   },
   "author": {
     "name": "A Strapi developer"
