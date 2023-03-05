@@ -6,7 +6,7 @@ module.exports = ({ env }) => ({
     keys: env.array('APP_KEYS'),
   },
   emitErrors: true,
-  url: 'https://dev-mudamuda.dpixel.pt/',
+  url: 'https://dev-mudamuda.dpixel.pt',
   proxy: true,
   cron: {
     enabled: env.bool('CRON_ENABLED', false),
