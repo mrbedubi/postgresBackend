@@ -1,7 +1,6 @@
-
 module.exports = ({ env }) => ({
-  proxy: true,
-  url: env('APP_URL'), // Sets the public URL of the application.
+  url: env('WEBSITE_URL'),
+  port: process.env.PORT,
   app: {
     keys: env.array('APP_KEYS')
   },
