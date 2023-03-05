@@ -1,0 +1,43 @@
+{
+  "collectionName": "components_user_details_user_details",
+  "info": {
+    "displayName": "User Details",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "firstName": {
+      "type": "string"
+    },
+    "surname": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "zipCode": {
+      "type": "string",
+      "regex": "^([1-9]\\d{3})-?(\\d{3})$"
+    },
+    "locality": {
+      "type": "string"
+    },
+    "phoneNumber": {
+      "type": "string",
+      "regex": "^(9[1236]\\d{7}|2\\d{8})$"
+    },
+    "balance": {
+      "type": "decimal",
+      "min": 0,
+      "default": 0
+    },
+    "holdBalance": {
+      "default": 0,
+      "min": 0,
+      "type": "decimal"
+    },
+    "IBAN": {
+      "type": "string"
+    }
+  }
+}

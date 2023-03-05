@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "transaction_histories",
+  "info": {
+    "singularName": "transaction-history",
+    "pluralName": "transaction-histories",
+    "displayName": "Transaction History "
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Status": {
+      "type": "enumeration",
+      "enum": [
+        "Pendente",
+        "Recusado",
+        "Aprovado"
+      ],
+      "required": true
+    },
+    "Update_Date": {
+      "type": "datetime",
+      "required": true
+    },
+    "transaction": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::transaction.transaction",
+      "inversedBy": "transaction_history"
+    }
+  }
+}

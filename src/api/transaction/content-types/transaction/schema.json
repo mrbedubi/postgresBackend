@@ -1,0 +1,72 @@
+{
+  "kind": "collectionType",
+  "collectionName": "transactions",
+  "info": {
+    "singularName": "transaction",
+    "pluralName": "transactions",
+    "displayName": "transaction",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "transferStatus": {
+      "type": "enumeration",
+      "enum": [
+        "recusado",
+        "aprovado",
+        "pendente"
+      ],
+      "default": "pendente",
+      "required": true
+    },
+    "transferType": {
+      "type": "enumeration",
+      "enum": [
+        "credito",
+        "debito"
+      ],
+      "required": true
+    },
+    "amount": {
+      "type": "decimal",
+      "min": 0.1,
+      "required": true
+    },
+    "transferToIban": {
+      "type": "string"
+    },
+    "transactionDate": {
+      "type": "datetime",
+      "required": true
+    },
+    "attachements": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "files"
+      ]
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "transactions"
+    },
+    "approval": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::approval.approval",
+      "mappedBy": "transaction"
+    },
+    "transaction_history": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::transaction-history.transaction-history",
+      "mappedBy": "transaction"
+    }
+  }
+}
