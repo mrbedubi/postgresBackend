@@ -8,7 +8,7 @@
     "contact": {
       "name": "TEAM",
       "email": "contact-email@something.io",
-      "url": "mywebsite.io"
+      "url": "https://dev-mudamuda.dpixel.pt/"
     },
     "license": {
       "name": "Apache 2.0",
@@ -28,7 +28,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:1337/api",
+      "url": "https://dev-mudamuda.dpixel.pt/api",
       "description": "Development server"
     }
   ],
