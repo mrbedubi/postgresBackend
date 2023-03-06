@@ -34,6 +34,7 @@ module.exports=(plugin)=>{
 
 
  const _ = require('lodash');
+const axios = require("axios");
 
 module.exports = (plugin) => {
   const getController = name => {
@@ -108,4 +109,58 @@ module.exports = (plugin) => {
 
   return plugin;
 };
+
+
+const { yup, validateYupSchema } = require('@strapi/utils');
+
+const callbackSchema = yup.object({
+  identifier: yup.string().required(),
+  password: yup.string().required(),
+});
+
+const registerSchema = yup.object({
+  email: yup.string().email().required(),
+  username: yup.string().required(),
+  password: yup.string().required(),
+});
+
+module.exports = {
+
+  validateRegisterBody: validateYupSchema(registerSchema),
+
+};
+
+module.exports = (plugin) => {
+  const register = plugin.controllers.auth.register;
+
+  plugin.controllers.auth.register = async (ctx) => {
+    console.log(ctx.request.body);
+    const userData = _.pick(ctx.request.body, ['username', 'email', 'password', 'UserDetails']);
+    const userDetails = _.mapValues(_.pick(userData.UserDetails, ['firstName', 'surname']), _.toString);
+    userData.UserDetails = userDetails;
+    ctx.request.body = userData
+    console.log(ctx.request.body);
+    /*
+    ctx.request.body.confirmed = false;
+    const token = ctx.request.body.token;
+    const gres = await axios.post(
+      `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.GOOGLE_SITEKEY}&response=${token}`
+    );
+    console.log(gres.data);
+    if (!gres.data.success) {
+      return ctx.badRequest(
+        null,
+        formatError({
+          id: "Auth.form.error.token.provide",
+          message: "Please provide a valid token.",
+        })
+      );
+    }
+
+    */
+    await register(ctx);
+  };
+  return plugin;
+};
+
 
