@@ -4,14 +4,15 @@
   "info": {
     "singularName": "transaction-history",
     "pluralName": "transaction-histories",
-    "displayName": "Transaction History "
+    "displayName": "Transaction History ",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
-    "Status": {
+    "state": {
       "type": "enumeration",
       "enum": [
         "Pendente",
@@ -20,7 +21,7 @@
       ],
       "required": true
     },
-    "Update_Date": {
+    "date": {
       "type": "datetime",
       "required": true
     },

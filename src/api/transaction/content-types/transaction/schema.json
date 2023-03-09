@@ -12,16 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "transferStatus": {
-      "type": "enumeration",
-      "enum": [
-        "recusado",
-        "aprovado",
-        "pendente"
-      ],
-      "default": "pendente",
-      "required": true
-    },
     "transferType": {
       "type": "enumeration",
       "enum": [
@@ -36,7 +26,9 @@
       "required": true
     },
     "transferToIban": {
-      "type": "string"
+      "type": "string",
+      "required": true,
+      "maxLength": 50
     },
     "transactionDate": {
       "type": "datetime",
@@ -68,6 +60,18 @@
       "relation": "oneToOne",
       "target": "api::transaction-history.transaction-history",
       "mappedBy": "transaction"
+    },
+    "transferStatus": {
+      "type": "enumeration",
+      "enum": [
+        "Pendente",
+        "Recusada",
+        "Aprovada"
+      ]
+    },
+    "status": {
+      "type": "boolean",
+      "required": false
     }
   }
 }

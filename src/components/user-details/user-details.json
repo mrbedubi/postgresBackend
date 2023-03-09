@@ -37,7 +37,8 @@
       "type": "decimal"
     },
     "IBAN": {
-      "type": "string"
+      "type": "string",
+      "maxLength": 50
     }
   }
 }

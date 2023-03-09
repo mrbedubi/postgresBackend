@@ -18,5 +18,14 @@ module.exports = {
 
       }
     },
+
+    {
+      "method": "POST",
+      "path": "/transaction/withdraw",
+      "handler": "transaction.withdraw",
+      "config": {
+
+      }
+    }
   ]
 }

@@ -16,6 +16,16 @@ module.exports = ({env}) => ({
       dsn: env('SENTRY_DSN'),
       sendMetadata: true,
     },
+
+    upload: {
+      config: {
+        providerOptions: {
+          localServer: {
+            maxage: 300000
+          },
+        },
+      },
+    },
   },
 
 

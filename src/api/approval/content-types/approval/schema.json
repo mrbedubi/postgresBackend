@@ -12,14 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "state": {
-      "type": "enumeration",
-      "enum": [
-        "aprovado",
-        "recusado"
-      ],
-      "required": true
-    },
     "gestor": {
       "type": "relation",
       "relation": "manyToOne",
@@ -31,6 +23,17 @@
       "relation": "oneToOne",
       "target": "api::transaction.transaction",
       "inversedBy": "approval"
+    },
+    "dateAproval": {
+      "type": "datetime"
+    },
+    "dateRequest": {
+      "type": "datetime",
+      "required": true
+    },
+    "approved": {
+      "type": "boolean",
+      "required": false
     }
   }
 }
