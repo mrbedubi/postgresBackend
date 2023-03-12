@@ -4,7 +4,8 @@
   "info": {
     "singularName": "credit",
     "pluralName": "credits",
-    "displayName": "Credit"
+    "displayName": "Credit",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -22,6 +23,12 @@
       "type": "decimal",
       "default": 0,
       "min": 0
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "credit"
     }
   }
 }
