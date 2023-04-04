@@ -12,11 +12,11 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "Description": {
+    "description": {
       "type": "text",
       "maxLength": 500
     },
-    "Service": {
+    "service": {
       "type": "string"
     },
     "amount": {
@@ -24,11 +24,17 @@
       "default": 0,
       "min": 0
     },
-    "users_permissions_user": {
+    "user": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
-      "inversedBy": "credit"
+      "inversedBy": "credits"
+    },
+    "transaction": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::transaction.transaction",
+      "inversedBy": "credits"
     }
   }
 }

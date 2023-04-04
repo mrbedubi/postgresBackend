@@ -81,15 +81,23 @@
       "target": "api::approval.approval",
       "mappedBy": "gestor"
     },
-    "text": {
-      "type": "string",
-      "default": "nada"
-    },
-    "credit": {
+    "credits": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "oneToMany",
       "target": "api::credit.credit",
-      "mappedBy": "users_permissions_user"
+      "mappedBy": "user"
+    },
+    "referral": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "referrals"
+    },
+    "referrals": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "referral"
     }
   }
 }

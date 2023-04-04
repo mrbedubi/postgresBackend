@@ -16,8 +16,8 @@
       "type": "enumeration",
       "enum": [
         "Pendente",
-        "Recusado",
-        "Aprovado"
+        "Recusada",
+        "Aprovada"
       ],
       "required": true
     },

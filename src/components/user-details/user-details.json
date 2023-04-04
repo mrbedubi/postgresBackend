@@ -22,9 +22,11 @@
     "locality": {
       "type": "string"
     },
-    "phoneNumber": {
+    "phone": {
       "type": "string",
-      "regex": "^(9[1236]\\d{7}|2\\d{8})$"
+      "regex": "^(9[1236]\\d{7}|2\\d{8})$",
+      "required": true,
+      "unique": true
     },
     "balance": {
       "type": "decimal",
@@ -39,6 +41,24 @@
     "IBAN": {
       "type": "string",
       "maxLength": 50
+    },
+    "avatar": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "howfind": {
+      "type": "enumeration",
+      "enum": [
+        "Comercial Muda Muda",
+        "Apresentação Muda Muda",
+        "Referência ",
+        "Outro"
+      ],
+      "required": true
     }
   }
 }

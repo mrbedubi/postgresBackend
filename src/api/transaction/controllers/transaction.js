@@ -77,7 +77,7 @@ module.exports = createCoreController('api::transaction.transaction', ({ strapi 
     if(ctx.request.body.amount < 0) {
       return ctx.unauthorized();
     }
-    const data = _.pick(ctx.request.body, ['amount' , 'data']  );
+    const data = _.pick(ctx.request.body, ['amount' , 'data','attachements']  );
     console.log(data);
     const userInfo = await strapi.entityService.findOne('plugin::users-permissions.user', user.id , {
       fields: ['email', 'username'],
@@ -148,6 +148,7 @@ module.exports = createCoreController('api::transaction.transaction', ({ strapi 
         amount: amount,
         transferToIban: IBAN,
         transactionDate: date,
+        attachements: data.attachements || null ,
         user:{ connect: [
             { id: user.id },
           ], },
@@ -157,6 +158,7 @@ module.exports = createCoreController('api::transaction.transaction', ({ strapi 
       },
     });
 
+    /*
     const approval  = await strapi.entityService.create( 'api::approval.approval',  {
       data: {
         dateRequest: date,
@@ -164,19 +166,23 @@ module.exports = createCoreController('api::transaction.transaction', ({ strapi 
       },
     });
 
+*/
 
     // ROLLBACK //
 
-    if(!transfer || !history || !approval ) {
+    if(!transfer || !history /*|| !approval */) {
       if(transfer) {
         await strapi.entityService.delete('api::transaction.transaction', history.id);
       }
         if(history) {
           await strapi.entityService.delete('api::transaction-history.transaction-history', history.id);
         }
+        /*
           if(approval) {
             await strapi.entityService.delete('api::approval.approval', history.id);
           }
+          */
+
 
       return ctx.badRequest('Ocorreu um erro ao realizar esta operação , contacte a equipa da mudamuda para mais detalhes');
     }
@@ -192,7 +198,6 @@ module.exports = createCoreController('api::transaction.transaction', ({ strapi 
        }
      }
     });
-    console.log('sdsdssd',Update);
 
     const transferDetails= {
 

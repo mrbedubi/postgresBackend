@@ -27,7 +27,7 @@
     },
     "transferToIban": {
       "type": "string",
-      "required": true,
+      "required": false,
       "maxLength": 50
     },
     "transactionDate": {
@@ -46,8 +46,7 @@
       "type": "relation",
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
-      "inversedBy": "transactions",
-      "required": true
+      "inversedBy": "transactions"
     },
     "approval": {
       "type": "relation",
@@ -69,9 +68,16 @@
         "Aprovada"
       ]
     },
-    "status": {
+    "credits": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::credit.credit",
+      "mappedBy": "transaction"
+    },
+    "complete": {
       "type": "boolean",
-      "required": false
+      "default": false,
+      "required": true
     }
   }
 }
