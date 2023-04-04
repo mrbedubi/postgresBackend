@@ -577,7 +577,7 @@
       "operationId": "delete/users-permissions/roles/{role}"
     }
   },
-  "/user/checkReferral": {
+  "/user/checkReferral/{number}": {
     "get": {
       "responses": {
         "200": {
@@ -644,11 +644,22 @@
       "tags": [
         "Users-permissions - User"
       ],
-      "parameters": [],
-      "operationId": "get/user/checkReferral"
+      "parameters": [
+        {
+          "name": "number",
+          "in": "path",
+          "description": "",
+          "deprecated": false,
+          "required": true,
+          "schema": {
+            "type": "number"
+          }
+        }
+      ],
+      "operationId": "get/user/checkReferral/{number}"
     }
   },
-  "/user/checkEmail": {
+  "/user/checkEmail/{email}": {
     "get": {
       "responses": {
         "200": {
@@ -715,8 +726,19 @@
       "tags": [
         "Users-permissions - User"
       ],
-      "parameters": [],
-      "operationId": "get/user/checkEmail"
+      "parameters": [
+        {
+          "name": "email",
+          "in": "path",
+          "description": "",
+          "deprecated": false,
+          "required": true,
+          "schema": {
+            "type": "number"
+          }
+        }
+      ],
+      "operationId": "get/user/checkEmail/{email}"
     }
   },
   "/user/me": {

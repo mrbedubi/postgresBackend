@@ -21,6 +21,7 @@ module.exports = createCoreController('api::transaction.transaction', ({ strapi 
     console.log(user.id)
     const result = await strapi.entityService.findMany('api::transaction.transaction', {
       sort: { transactionDate: 'desc' },
+      populate:{attachements:true},
       filters: {
         user: {
           id: {

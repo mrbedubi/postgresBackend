@@ -78,7 +78,7 @@ module.exports = (plugin) => {
     if (newData.username) {
       const userWithSameUsername = await strapi
         .query('plugin::users-permissions.user')
-        .findOne({where: {username: newData.username}});
+        .findMany({where: {username: newData.username}});
 
       if (userWithSameUsername && userWithSameUsername.id != user.id) {
         return ctx.badRequest('Username already taken');
@@ -89,7 +89,7 @@ module.exports = (plugin) => {
     if (newData.email) {
       const userWithSameEmail = await strapi
         .query('plugin::users-permissions.user')
-        .findOne({where: {email: newData.email.toLowerCase()}});
+        .findMany({where: {email: newData.email.toLowerCase()}});
 
       if (userWithSameEmail && userWithSameEmail.id != user.id) {
         return ctx.badRequest('Email already taken');
@@ -135,19 +135,19 @@ module.exports = (plugin) => {
 
 
   plugin.controllers.user.checkEmail = async (ctx) => {
-  const data  = _.pick(ctx.request.body, ['email']);
+  const  { email } = ctx.request.params;
 
     const userWithSameEmail = await strapi
       .query('plugin::users-permissions.user')
-      .findOne({ where: { email: data.email.toLowerCase() } });
+      .findMany({ where: { email: email.toLowerCase() } });
 
-    return !userWithSameEmail; // return false if the email is already taken
+     return {message: userWithSameEmail.length ===0};// return false if the email is already taken
 
   }
 
   plugin.routes['content-api'].routes.unshift({
     method: 'GET',
-    path: '/user/checkEmail',
+    path: '/user/checkEmail/:email',
     handler: 'user.checkEmail',
     config: {
       prefix: ''
@@ -203,18 +203,18 @@ module.exports = (plugin) => {
       filters: {
         UserDetails: {
           phone: {
-            eq: number,
+            $eq: number,
           },
         },
       },
     });
-    return userWithSamePhone.length !==0; // return ture if the phone numer is exists
+    return {message: userWithSamePhone.length > 0}; // return ture if the phone numer is exists
 
   }
 
   plugin.routes['content-api'].routes.unshift({
     method: 'GET',
-    path: '/user/checkReferral',
+    path: '/user/checkReferral/:number',
     handler: 'user.checkReferral',
     config: {
       prefix: ''
@@ -260,6 +260,8 @@ module.exports = (plugin) => {
 
 
 
+
+
     if (userData.referral) {
       const referralUser = await strapi.entityService.findMany('plugin::users-permissions.user', {
         fields:['id'],
@@ -278,6 +280,17 @@ module.exports = (plugin) => {
         console.log(referralUser[0]);
       }
 
+    }
+
+    if (userData.email) {
+      const userWithSameEmail = await strapi
+        .query('plugin::users-permissions.user')
+        .findMany({where: {email: userData.email.toLowerCase()}});
+
+      if (userWithSameEmail.length > 0) {
+        return ctx.badRequest('Email already taken');
+      }
+      userData.email = userData.email.toLowerCase();
     }
 
     ctx.request.body = userData;
