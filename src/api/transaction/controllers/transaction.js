@@ -21,7 +21,11 @@ module.exports = createCoreController('api::transaction.transaction', ({ strapi 
     console.log(user.id)
     const result = await strapi.entityService.findMany('api::transaction.transaction', {
       sort: { transactionDate: 'desc' },
-      populate:{attachements:true},
+      populate:{
+        credits:{
+          fields: ['id', 'amount', 'service', 'serviceValue'],
+        }
+      },
       filters: {
         user: {
           id: {
@@ -46,7 +50,38 @@ module.exports = createCoreController('api::transaction.transaction', ({ strapi 
       populate: {
         user:{
           fields: ['id'],
-        }},
+        },
+        attachements:{
+          fields: ['name', 'url'],
+        },
+        approval:{
+          fields: ['id','motive'],
+          populate: {
+            gestor:{
+              fields: ['id'],
+              populate: {
+                UserDetails:{
+                  fields: ['firstName' , 'surname'],
+                }
+              }
+            },
+            transferProof:{
+              fields: ['name', 'url'],
+            }
+          }
+        },
+
+        credits: {
+          fields: ['id', 'service', 'serviceValue' ,'description'  ],
+          populate: {
+            serviceProof:{
+              fields: ['name', 'url'],
+            }
+          }
+
+        },
+
+        },
 
 
 
@@ -78,8 +113,14 @@ module.exports = createCoreController('api::transaction.transaction', ({ strapi 
     if(ctx.request.body.amount < 0) {
       return ctx.unauthorized();
     }
-    const data = _.pick(ctx.request.body, ['amount' , 'data','attachements']  );
+    const data = _.pick(ctx.request.body, ['amount' , 'data']  );
     console.log(data);
+    console.log(ctx.request.files);
+    console.log(ctx.request.files.attachements);
+    if(ctx.request.files.attachements === undefined){
+      return ctx.badRequest("Ficheiro em falta");
+    }
+
     const userInfo = await strapi.entityService.findOne('plugin::users-permissions.user', user.id , {
       fields: ['email', 'username'],
       populate: {
@@ -91,7 +132,7 @@ module.exports = createCoreController('api::transaction.transaction', ({ strapi 
     console.log(userInfo);
 
     // USER VERIFICATION //
-    let amount = data.amount;
+    let amount = Number(parseFloat(data.amount).toFixed(2));
     const balance = userInfo.UserDetails.balance;
 
 
@@ -147,9 +188,9 @@ module.exports = createCoreController('api::transaction.transaction', ({ strapi 
       data: {
         transferType : 'debito',
         amount: amount,
+        transferStatus: 'Pendente',
         transferToIban: IBAN,
         transactionDate: date,
-        attachements: data.attachements || null ,
         user:{ connect: [
             { id: user.id },
           ], },
@@ -157,8 +198,10 @@ module.exports = createCoreController('api::transaction.transaction', ({ strapi 
             { id: historyId },
           ], }
       },
+      files:ctx.request.files  ,
+      populate:{attachements:true},
     });
-
+    console.log("Transfer Created : ", transfer);
     /*
     const approval  = await strapi.entityService.create( 'api::approval.approval',  {
       data: {

@@ -32,9 +32,21 @@
     },
     "transaction": {
       "type": "relation",
-      "relation": "manyToOne",
+      "relation": "oneToOne",
       "target": "api::transaction.transaction",
       "inversedBy": "credits"
+    },
+    "serviceValue": {
+      "type": "decimal"
+    },
+    "serviceProof": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
     }
   }
 }

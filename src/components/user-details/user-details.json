@@ -19,7 +19,7 @@
       "type": "string",
       "regex": "^([1-9]\\d{3})-?(\\d{3})$"
     },
-    "locality": {
+    "district": {
       "type": "string"
     },
     "phone": {
@@ -59,6 +59,12 @@
         "Outro"
       ],
       "required": true
+    },
+    "profession": {
+      "type": "string"
+    },
+    "birthDate": {
+      "type": "date"
     }
   }
 }

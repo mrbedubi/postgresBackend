@@ -159,10 +159,10 @@ module.exports = (plugin) => {
 
   plugin.controllers.user.checkNumber = async (ctx , next ) => {
     let { number } = ctx.request.params;
-    const regex = new RegExp('^(9[1236]\\d{7}|2\\d{8})$');
+    const regex = new RegExp('^(9[123456]\\d{7}|2\\d{8})$');
 
     if (!regex.test(number)) {
-      return {message: 'numero inválido'}
+      return {message: 'contacto inválido'}
     }
 
     const userWithSamePhone = await strapi.entityService.findMany('plugin::users-permissions.user', {

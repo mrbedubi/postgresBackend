@@ -36,10 +36,11 @@
     },
     "attachements": {
       "type": "media",
-      "multiple": true,
+      "multiple": false,
       "required": false,
       "allowedTypes": [
-        "files"
+        "files",
+        "images"
       ]
     },
     "user": {
@@ -68,16 +69,21 @@
         "Aprovada"
       ]
     },
-    "credits": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::credit.credit",
-      "mappedBy": "transaction"
-    },
     "complete": {
       "type": "boolean",
       "default": false,
       "required": true
+    },
+    "referral_from": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "credits": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::credit.credit",
+      "mappedBy": "transaction"
     }
   }
 }
