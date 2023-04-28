@@ -50,21 +50,20 @@
         "images"
       ]
     },
-    "howfind": {
-      "type": "enumeration",
-      "enum": [
-        "Comercial Muda Muda",
-        "Apresentação Muda Muda",
-        "Referência ",
-        "Outro"
-      ],
-      "required": true
-    },
     "profession": {
       "type": "string"
     },
     "birthDate": {
       "type": "date"
+    },
+    "howfind": {
+      "type": "enumeration",
+      "enum": [
+        "Comercial Muda Muda",
+        "Apresentação Muda Muda",
+        "Referência",
+        "Outro"
+      ]
     }
   }
 }

@@ -229,9 +229,9 @@ module.exports = (plugin) => {
   const register = plugin.controllers.auth.register;
 
   plugin.controllers.auth.register = async (ctx) => {
-    console.log(ctx.request.body);
+
     const userData = _.pick(ctx.request.body, ['username', 'email', 'password', 'referral', 'UserDetails']);
-    console.log(userData);
+
     const userDetails = _.mapValues(_.pick(userData.UserDetails, ['firstName', 'surname' , "locality" , 'phone' ,'avatar','howfind']), _.toString);
     userData.UserDetails = userDetails;
 
@@ -240,7 +240,7 @@ module.exports = (plugin) => {
       const regex = new RegExp('^(9[1236]\\d{7}|2\\d{8})$');
 
       if (!regex.test(userData.UserDetails.phone)) {
-        return {message: 'numero inválido'}
+        return ctx.badRequest('O numero '+userData.UserDetails.phone +' de telemovel indicado é inválido');
       }
 
       const userWithSamePhone = await strapi.entityService.findMany('plugin::users-permissions.user', {
@@ -277,7 +277,7 @@ module.exports = (plugin) => {
         return ctx.badRequest('Não Encontramos nenhum utilizador associado a este numero '+userData.referral +'. Verifique se introduziu o numero correto.');
       }else {
         userData.referral=referralUser[0].id;
-        console.log(referralUser[0]);
+
       }
 
     }
@@ -295,7 +295,7 @@ module.exports = (plugin) => {
 
     ctx.request.body = userData;
 
-    console.log(ctx.request.body);
+    console.log(ctx);
 
     /*
     ctx.request.body.confirmed = false;
