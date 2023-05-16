@@ -64,6 +64,7 @@ module.exports = (plugin) => {
   // Create the new controller
   plugin.controllers.user.updateMe = async (ctx) => {
     const user = ctx.state.user;
+    console.log(user);
 
 
     // User has to be logged in to update themselves
@@ -72,30 +73,20 @@ module.exports = (plugin) => {
     }
 
     // Pick only specific fields for security
-    const newData = _.pick(ctx.request.body, ['username']);
+    const newData = _.pick(ctx.request.body, ['phone', 'zipCode', 'district', 'address', 'birthDate', 'profession']);
 
-    // Make sure there is no duplicate user with the same username
-    if (newData.username) {
-      const userWithSameUsername = await strapi
-        .query('plugin::users-permissions.user')
-        .findMany({where: {username: newData.username}});
-
-      if (userWithSameUsername && userWithSameUsername.id != user.id) {
-        return ctx.badRequest('Username already taken');
+    // Get User Details
+    const userDetail = await strapi.entityService.findOne('plugin::users-permissions.user',user.id,{
+      populate:{UserDetails :true},
+      UserDetails:{
+        fields: ['id','phone', 'zipCode', 'district', 'address', 'birthDate' ]
       }
-    }
+    });
 
-    // Make sure there is no duplicate user with the same email
-    if (newData.email) {
-      const userWithSameEmail = await strapi
-        .query('plugin::users-permissions.user')
-        .findMany({where: {email: newData.email.toLowerCase()}});
+    console.log(userDetail);
 
-      if (userWithSameEmail && userWithSameEmail.id != user.id) {
-        return ctx.badRequest('Email already taken');
-      }
-      newData.email = newData.email.toLowerCase();
-    }
+
+
 
     // Check if user is changing password and make sure passwords match
     if (newData.password) {
@@ -110,11 +101,73 @@ module.exports = (plugin) => {
     console.log(newData);
 
     // Reconstruct context so we can pass to the controller
-    ctx.request.body = newData
-    ctx.params = {id: user.id}
+
+    // filter all the fields that have change
+    const UpdatedData = Object.keys(newData).reduce((acc, current) => {
+      console.log(userDetail.UserDetails[current] , newData[current]);
+      // filter empty fields
+      if(newData[current] === null || newData[current] === '' || newData[current] === undefined || newData[current].length === 0) {
+      }else{
+        if (newData[current] !== userDetail.UserDetails[current] ) {
+          acc[current] = newData[current];
+        }
+      }
+
+      return acc;
+    }, {});
+
+
+    console.log('canhged fileds', UpdatedData);
+
+
 
     // Update the user and return the sanitized data
-    return await getController('user').update(ctx)
+    if(Object.keys(UpdatedData).length === 0){
+    return {message: 'No data to update'};
+    }else{
+
+
+      if (UpdatedData["phone"]){
+        console.log('phone');
+
+        // check if phone already exists
+        const userWithSamePhone = await strapi.entityService.findMany('plugin::users-permissions.user', {
+          fields:['id'],
+          filters: {
+            UserDetails: {
+              phone: {
+                $eq: newData["phone"],
+              },
+            },
+          },
+        });
+        if(userWithSamePhone.length > 0){
+          return ctx.badRequest('Este numero já se encontra registado');
+        }
+      }
+
+      const Update = await strapi.entityService.update('plugin::users-permissions.user', user.id , {
+        data: {
+          UserDetails:{
+            id: userDetail.UserDetails.id,
+            ...UpdatedData
+          }
+        },
+      });
+
+      return {data: {...UpdatedData}};
+    }
+
+    // send email to user notifying the change of data
+    /*
+    const emailTemplate = await strapi.entityService.findOne('email-template', { slug: 'user-data-change' });
+    const emailTemplateData = {
+      to: user.email,
+      from: 'diogo.azev97@gmail.com'
+};
+    await strapi.plugins['email'].services.email.sendTemplatedEmail(emailTemplate, emailTemplateData);
+
+*/
   };
 
 
@@ -122,9 +175,49 @@ module.exports = (plugin) => {
 
   // Add the custom route
   plugin.routes['content-api'].routes.unshift({
-    method: 'PUT',
+    method: 'PATCH',
     path: '/user/me',
     handler: 'user.updateMe',
+    config: {
+      prefix: ''
+    }
+  })
+
+
+
+  // Update Avatar Image
+  plugin.controllers.user.updateAvatar = async (ctx) => {
+  const user = ctx.state.user;
+  const {avatar} = ctx.request.files;
+
+    const  UserAvatar = await strapi.entityService.findOne('plugin::users-permissions.user',user.id,{
+      populate:{avatar:true},
+      fields: ['id']
+    });
+    console.log(UserAvatar);
+
+  // if avatar image already exists on the current user then delete it
+  if(UserAvatar.avatar){
+    const deleteAvatar = await strapi.plugins.upload.services.upload.remove(UserAvatar.avatar);
+  }
+
+    const Update = await strapi.entityService.update('plugin::users-permissions.user', user.id , {
+      data: {
+      },
+      populate: {avatar: true},
+      files: {
+        avatar: avatar,
+      },
+    });
+
+    return  Update.avatar;
+  }
+
+  // Add the custom route
+  plugin.routes['content-api'].routes.unshift({
+    method: 'POST',
+    path: '/user/me/avatar',
+    handler: 'user.updateAvatar',
     config: {
       prefix: ''
     }
@@ -222,6 +315,29 @@ module.exports = (plugin) => {
 
 
   });
+
+
+  // check if a user is admin or not - retrun true if it is admin
+  plugin.controllers.user.checkRole = async (ctx) => {
+    const user =  ctx.state.user;
+    if (user.role.type === 'admin'){
+      return {message: true};
+    }else{
+      return {message: false};
+    }
+  }
+
+  plugin.routes['content-api'].routes.unshift({
+    method: 'GET',
+    path: '/user/checkRole',
+    handler: 'user.checkRole',
+    config: {
+      prefix: ''
+    }
+
+
+  });
+
 
 
 

@@ -42,14 +42,6 @@
       "type": "string",
       "maxLength": 50
     },
-    "avatar": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": [
-        "images"
-      ]
-    },
     "profession": {
       "type": "string"
     },
@@ -64,6 +56,9 @@
         "Referência",
         "Outro"
       ]
+    },
+    "IBANVerified": {
+      "type": "boolean"
     }
   }
 }

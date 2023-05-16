@@ -11,19 +11,13 @@ module.exports = createCoreController('api::approval.approval', ({ strapi }) => 
   async approve(ctx) {
     console.log("sddsd");
     const {user} = ctx.state;
-    const data = ctx.request.body ;
+    const data = ctx.request.body
+    const {transferproof} = ctx.request.files;
+    const trans_id = data.id;
+    const approved = Boolean(data.approved);
 
     console.log(data);
-   /* const obj = {
-      id : number ,
-      approved : 0|1 ,
-      motive : 's',
-      transferProof;
-    }
-    */
-    const trans_id = data.id;
-
-    console.log(trans_id);
+    console.log(approved);
 
 
     const transaction = await strapi.entityService.findOne('api::transaction.transaction', trans_id,{
@@ -41,7 +35,7 @@ module.exports = createCoreController('api::approval.approval', ({ strapi }) => 
     }
 
     if  (transaction.complete){
-      return  ctx.badRequest('Esta trnasação já foi aprovada');
+      return  ctx.badRequest('Esta transação já foi aprovada');
     }
 
 
@@ -58,49 +52,64 @@ module.exports = createCoreController('api::approval.approval', ({ strapi }) => 
       return ctx.badRequest('este utilizador não existe')
     }
 
-    console.log(data.approved ? 'Aprovada' : 'Recusada');
+    console.log(approved ? 'Aprovada' : 'Recusada');
 
     const UpdateTransaction = await strapi.entityService.update('api::transaction.transaction', trans_id,{
       data: {
-        status : data.approved ,
+        status : approved ,
         complete: true ,
-        transferStatus: data.approved ? 'Aprovada' : 'Recusada'
+        transferStatus: approved ? 'Aprovada' : 'Recusada'
       }
     });
     console.log(UpdateTransaction)
 
     const history  = await strapi.entityService.create('api::transaction-history.transaction-history',  {
       data: {
-        state: data.approved ? 'Aprovada' : 'Recusada',
+        state: approved ? 'Aprovada' : 'Recusada',
         date: new Date,
         transaction :  { connect: [transaction.id] }
       },
     });
 
 
-    const  approval = await strapi.entityService.create('api::approval.approval',{
-      data:{
-        gestor: { connect: [user.id] },
-        transaction :  { connect: [transaction.id] },
-        dateAproval : new Date,
-        dateRequest: transaction.transactionDate ,
-        approved : data.approved,
-        motive: data.motive,
-        transferProof : data.transferProof || null
-      }
+    if(transferproof){
+      const  approval = await strapi.entityService.create('api::approval.approval',{
+        data:{
+          gestor: { connect: [user.id] },
+          transaction :  { connect: [transaction.id] },
+          dateAproval : new Date,
+          dateRequest: transaction.transactionDate ,
+          approved : approved,
+          motive: data.motive!=='' || data.motive !==" "  ? data.motive : null,
+        },populate:{transferProof:true},
+        files:{
+          transferProof: transferproof
+        }
 
-    });
+      });
+    } else{
+      const  approval = await strapi.entityService.create('api::approval.approval',{
+        data:{
+          gestor: { connect: [user.id] },
+          transaction :  { connect: [transaction.id] },
+          dateAproval : new Date,
+          dateRequest: transaction.transactionDate ,
+          approved : approved,
+          motive: data.motive!=='' || data.motive !==" "  ? data.motive : null,
+        },
+      });
+    }
 
     console.log(recipient.UserDetails.holdBalance -transaction.amount);
 
-if (data.approved){
+if (approved){
 // if the transaction is approved
   console.log('ola');
   const Update = await  strapi.entityService.update('plugin::users-permissions.user', transaction.user.id , {
    data:{
      UserDetails:{
        id: recipient.UserDetails.id,
-       holdBalance : recipient.holdBalance - transaction.amount,
+       holdBalance : recipient.UserDetails.holdBalance - transaction.amount,
      }
    }
 
@@ -135,7 +144,7 @@ data:{
     console.log("old",recipient );
     console.log("new",recipientUpdate );
 
-return 'success';
+    ctx.send({ message: 'Success' });
 
   }
 
