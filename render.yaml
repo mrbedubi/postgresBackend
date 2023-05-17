@@ -4,7 +4,7 @@ services:
     env: node
     plan: starter
     buildCommand: npm install && npm build
-    startCommand: yarn start
+    startCommand: npm start
     healthCheckPath: /_health
     disk:
       name: strapi-uploads
