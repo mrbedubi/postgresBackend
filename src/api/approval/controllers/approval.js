@@ -112,7 +112,7 @@ if (approved){
    }
 
   })
-  console.log("Update",Update );
+  console.log("Upd",Update );
 
 }else {
 // if the transaction is rejected
