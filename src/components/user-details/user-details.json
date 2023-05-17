@@ -59,6 +59,10 @@
     },
     "IBANVerified": {
       "type": "boolean"
+    },
+    "bankName": {
+      "type": "string",
+      "required": false
     }
   }
 }

@@ -100,11 +100,9 @@ module.exports = createCoreController('api::approval.approval', ({ strapi }) => 
       });
     }
 
-    console.log(recipient.UserDetails.holdBalance -transaction.amount);
 
 if (approved){
 // if the transaction is approved
-  console.log('ola');
   const Update = await  strapi.entityService.update('plugin::users-permissions.user', transaction.user.id , {
    data:{
      UserDetails:{
@@ -128,7 +126,7 @@ data:{
   }
 }
   })
-  console.log("Update",Update );
+
 
 
 }
