@@ -15,7 +15,7 @@
     "@strapi/plugin-sentry": "^4.7.1",
     "@strapi/plugin-users-permissions": "4.10.1",
     "@strapi/provider-email-sendgrid": "^4.7.1",
-    "@strapi/strapi": "4.10.1",
+    "@strapi/strapi": "4.11.0",
     "pg": "^8.10.0",
     "strapi-plugin-graphs-builder": "^1.0.0",
     "strapi-plugin-protected-populate": "^1.1.0",
