@@ -14,7 +14,7 @@
     "@strapi/plugin-i18n": "4.10.1",
     "@strapi/plugin-sentry": "^4.7.1",
     "@strapi/plugin-users-permissions": "4.10.1",
-    "@strapi/provider-email-sendgrid": "^4.7.1",
+    "@strapi/provider-email-sendgrid": "^4.11.0",
     "@strapi/strapi": "4.10.1",
     "pg": "^8.10.0",
     "strapi-plugin-graphs-builder": "^1.0.0",
