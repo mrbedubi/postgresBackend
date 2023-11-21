@@ -18,7 +18,7 @@
     "@strapi/strapi": "4.10.1",
     "pg": "^8.10.0",
     "strapi-plugin-graphs-builder": "^1.0.0",
-    "strapi-plugin-protected-populate": "^1.1.0",
+    "strapi-plugin-protected-populate": "^1.3.4",
     "strapi-provider-email-sendinblue": "^4.0.0"
   },
   "author": {
